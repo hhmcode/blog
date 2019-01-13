@@ -10,7 +10,14 @@ class Edit extends Component {
       title: "",
       description: "",
       author: "",
-      imageURL: ""
+      imageURL: "",
+      formErrors: { title: "", description: "", author: "" },
+      formValid: {
+        title: false,
+        description: false,
+        author: false,
+        imageURL: false
+      }
     };
   }
 
@@ -68,59 +75,95 @@ class Edit extends Component {
   };
 
   render() {
+    const { title, description, author } = this.state;
     return (
       <div className="container">
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h3 className="panel-title">EDIT Blog Post {this.state.key} </h3>
-          </div>
+        <div className="row">
+          <blockquote>
+            <h1 className="blue-text">EDIT Blog Post {this.state.key} </h1>
+          </blockquote>
           <div className="panel-body">
-            <h4>
-              <Link
-                to={`/Blog/Post/${this.state.key}`}
-                className="btn btn-primary"
-              >
-                BACK
-              </Link>
-            </h4>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label for="title">Title:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="title"
-                  value={this.state.title}
-                  onChange={this.onChange}
-                  placeholder="Title"
-                />
+            <div className="row">
+              <h4>
+                <Link
+                  to={`/Blog/Post/${this.state.key}`}
+                  className="btn btn-primary"
+                >
+                  BACK <i className="material-icons right">arrow_back</i>
+                </Link>
+              </h4>
+            </div>
+            <form onSubmit={this.onSubmit} className="s12">
+              <div className="row">
+                <div className="input-field">
+                  <label htmlFor="title" className="active">
+                    Title:
+                  </label>
+                  <input
+                    type="text"
+                    className={
+                      this.state.formErrors.title === ""
+                        ? "form-control"
+                        : "form-control error"
+                    }
+                    name="title"
+                    value={title}
+                    onChange={this.onChange}
+                    autoComplete="off"
+                    placeholder="Title:"
+                  />
+                  <div className="errorTxt">{this.state.formErrors.title}</div>
+                </div>
               </div>
-              <div className="form-group">
-                <label for="description">Description:</label>
-                <textarea
-                  type="text"
-                  className="form-control"
-                  name="description"
-                  value={this.state.description}
-                  onChange={this.onChange}
-                />
+              <div className="row">
+                <div className="input-field">
+                  <label htmlFor="description" className="active">
+                    Description:
+                  </label>
+                  <textarea
+                    className={
+                      this.state.formErrors.description === ""
+                        ? "materialize-textarea"
+                        : "materialize-textarea error"
+                    }
+                    name="description"
+                    value={description}
+                    onChange={this.onChange}
+                    placeholder="Description:"
+                  >
+                    {description}
+                  </textarea>
+                  <div className="errorTxt">
+                    {this.state.formErrors.description}
+                  </div>
+                </div>
               </div>
-              <div className="form-group">
-                <label for="author">Author:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="author"
-                  value={this.state.author}
-                  onChange={this.onChange}
-                  placeholder="Author"
-                />
+              <div className="row">
+                <div className="input-field">
+                  <label htmlFor="author" className="active">
+                    Author:
+                  </label>
+                  <input
+                    type="text"
+                    className={
+                      this.state.formErrors.author === ""
+                        ? "form-control"
+                        : "form-control error"
+                    }
+                    name="author"
+                    value={author}
+                    onChange={this.onChange}
+                    autoComplete="off"
+                    placeholder="Author:"
+                  />
+                  <div className="errorTxt">{this.state.formErrors.author}</div>
+                </div>
               </div>
               <div>
                 <img src={this.state.imageURL} alt="" width="600" />
               </div>
-              <button type="submit" className="btn btn-success">
-                Submit
+              <button type="submit" className="btn-large green">
+                Submit <i className="material-icons right">send</i>
               </button>
             </form>
           </div>

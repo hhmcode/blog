@@ -49,12 +49,23 @@ class Post extends Component {
       <div className="container">
         <div className="panel panel-default">
           <div className="panel-heading">
-            <h4>
-              <Link className="btn btn-primary" to="/Blog">
-                All Blog Posts
-              </Link>
-            </h4>
-            <h3 className="panel-title">{this.state.blog.title}</h3>
+            <blockquote>
+              <h3 className="blue-text">{this.state.blog.title}</h3>
+            </blockquote>
+            <h6>Author:</h6>
+            <p>{this.state.blog.author}</p>
+          </div>
+          <div className="row">
+            <Link to={`/Blog/edit/${this.state.key}`} className="btn green">
+              Edit <i className="material-icons left ">edit</i>
+            </Link>
+
+            <button
+              onClick={this.delete.bind(this, this.state.key)}
+              className="btn red right"
+            >
+              Delete <i className="material-icons left">delete</i>
+            </button>
           </div>
           <div className="panel-body">
             <div>
@@ -64,25 +75,10 @@ class Post extends Component {
                 alt=""
               />
             </div>
-            <dl>
-              <dt>Description:</dt>
-              <dd>{this.state.blog.description}</dd>
-              <dt>Author:</dt>
-              <dd>{this.state.blog.author}</dd>
-            </dl>
-            <Link
-              to={`/Blog/edit/${this.state.key}`}
-              className="btn btn-success"
-            >
-              Edit
-            </Link>
-            &nbsp;
-            <button
-              onClick={this.delete.bind(this, this.state.key)}
-              className="btn btn-danger"
-            >
-              Delete
-            </button>
+            <div>
+              <h6>Description:</h6>
+              <p>{this.state.blog.description}</p>
+            </div>
           </div>
         </div>
       </div>

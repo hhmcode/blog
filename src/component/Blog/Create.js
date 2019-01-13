@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import firebase from "../../Firebase";
-
 import ImageUpload from "./ImageUpload";
 
 // const formValid = ({ formErrors, ...rest }) => {
@@ -44,7 +43,9 @@ class Create extends Component {
 
   onChange = e => {
     e.preventDefault();
+    //console.log(e.target.className);
     const { name, value } = e.target;
+
     let state = this.state;
     let formErrors = state.formErrors;
     let formValid = state.formValid;
@@ -52,7 +53,7 @@ class Create extends Component {
       case "title":
         formErrors.title =
           value.length < 6 && value.length > 0
-            ? "minimum 6 chrachters required"
+            ? "Minimum  6 chrachters required"
             : "";
         formErrors.title
           ? this.setState({
@@ -69,7 +70,7 @@ class Create extends Component {
       case "description":
         formErrors.description =
           value.length < 50 && value.length > 0
-            ? "minimum 50 chrachters required"
+            ? "Minimum  50 chrachters required"
             : "";
         formErrors.description
           ? this.setState({
@@ -155,36 +156,45 @@ class Create extends Component {
     return (
       <div className="container ">
         <div className="row ">
-          <form onSubmit={this.onSubmit} class="className s12">
+          <blockquote>
+            <h1 className="blue-text">Create Post</h1>
+          </blockquote>
+          <form onSubmit={this.onSubmit} className="s12">
             <div className="row">
               <div className="input-field">
                 <label htmlFor="title">Title:</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={
+                    this.state.formErrors.title === ""
+                      ? "form-control"
+                      : "form-control error"
+                  }
                   name="title"
                   value={title}
                   onChange={this.onChange}
                   autoComplete="off"
                 />
-                <div>
-                  <span className="errorMessage">
-                    {this.state.formErrors.title}
-                  </span>
-                </div>
+                <div className="errorTxt">{this.state.formErrors.title}</div>
               </div>
             </div>
             <div className="row">
               <div className="input-field">
                 <label htmlFor="description">Description:</label>
                 <textarea
-                  className="materialize-textarea"
+                  className={
+                    this.state.formErrors.description === ""
+                      ? "materialize-textarea"
+                      : "materialize-textarea error"
+                  }
                   name="description"
                   onChange={this.onChange}
                 >
                   {description}
                 </textarea>
-                <div>{this.state.formErrors.description}</div>
+                <div className="errorTxt">
+                  {this.state.formErrors.description}
+                </div>
               </div>
             </div>
             <div className="row">
@@ -192,13 +202,17 @@ class Create extends Component {
                 <label htmlFor="author">Author:</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={
+                    this.state.formErrors.author === ""
+                      ? "form-control"
+                      : "form-control error"
+                  }
                   name="author"
                   value={author}
                   onChange={this.onChange}
                   autoComplete="off"
                 />
-                <div>{this.state.formErrors.author}</div>
+                <div className="errorTxt">{this.state.formErrors.author}</div>
               </div>
             </div>
 
@@ -206,12 +220,12 @@ class Create extends Component {
 
             <button
               type="submit"
-              className="btn-large btn-success"
+              className="btn-large green"
               disabled={
                 !Object.values(this.state.formValid).every(x => x === true)
               }
             >
-              Submit
+              Submit <i className="material-icons right">send</i>
             </button>
           </form>
         </div>

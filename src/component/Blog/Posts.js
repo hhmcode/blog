@@ -38,6 +38,9 @@ class Posts extends Component {
     return (
       <div className="container">
         <div className="row">
+          <blockquote>
+            <h3 className="blue-text">List Of All Blog Posts</h3>
+          </blockquote>
           {this.state.blog.map(blog => (
             <div className="col s12 m4">
               <div className="card ">
@@ -55,7 +58,7 @@ class Posts extends Component {
                 </div>
                 <div className="card-content">
                   {blog.description.length > 200 ? (
-                    <div>{`${blog.description.substring(0, 200)}...`}</div>
+                    <p>{`${blog.description.substring(0, 200)}...`}</p>
                   ) : (
                     <p>{blog.description}</p>
                   )}
@@ -65,7 +68,8 @@ class Posts extends Component {
                     className="btn btn-primary"
                     to={`/Blog/Post/${blog.key}`}
                   >
-                    Read more
+                    Read more{" "}
+                    <i className="material-icons left">remove_red_eye</i>
                   </Link>
                 </div>
               </div>

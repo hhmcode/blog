@@ -54,10 +54,6 @@ class ImageUpload extends Component {
     return (
       <div className="row">
         <div className="file-field input-field">
-          <progress value={this.state.progress} max={100} />
-          <div className="progress">
-            <div className="determinate" style={{ height: "70%" }} />
-          </div>
           <label htmlFor="coverImage" />
           <div className="btn-small teal lighten-3 white-text text-darken-2">
             <span>Select Image</span>
@@ -71,6 +67,12 @@ class ImageUpload extends Component {
         <div className={this.state.hide ? "input-field hide" : "input-field"}>
           <button onClick={this.handleUpload} className="btn lighten-5 pulse">
             Upload
+            <div className={this.state.hide ? "progress hide" : "progress"}>
+              <div
+                className="determinate"
+                style={{ width: this.state.progress + "%" }}
+              />
+            </div>
           </button>
         </div>
       </div>
