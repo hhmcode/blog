@@ -61,6 +61,9 @@ class ImageUpload extends Component {
           </div>
           <div className="file-path-wrapper">
             <input className="file-path validate" type="text" />
+            <span class="helper-text" data-error="wrong" data-success="right">
+              Image Should be HI-RES
+            </span>
           </div>
         </div>
 

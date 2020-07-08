@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase from "../../Firebase";
 import { Link } from "react-router-dom";
+import M from "materialize-css/dist/js/materialize.js";
 
 class Edit extends Component {
   constructor(props) {
@@ -13,10 +14,10 @@ class Edit extends Component {
       imageURL: "",
       formErrors: { title: "", description: "", author: "" },
       formValid: {
-        title: false,
-        description: false,
-        author: false,
-        imageURL: false
+        title: true,
+        description: true,
+        author: true,
+        imageURL: true
       }
     };
   }
@@ -40,38 +41,112 @@ class Edit extends Component {
         console.log("No such document!");
       }
     });
+
+    //TODO: Have to fix Textarea height
+    setTimeout(() => {
+      M.textareaAutoResize(document.querySelector(".materialize-textarea"));
+    }, 1500);
+    //M.textareaAutoResize(document.querySelector(".materialize-textarea"));
   }
 
   onChange = e => {
-    const state = this.state;
-    state[e.target.name] = e.target.value;
-    this.setState({ blog: state });
+    e.preventDefault();
+    //console.log(e.target.className);
+    const { name, value } = e.target;
+
+    let state = this.state;
+    let formErrors = state.formErrors;
+    let formValid = state.formValid;
+    switch (name) {
+      case "title":
+        formErrors.title =
+          value.length < 6 && value.length > 0
+            ? "Minimum  6 chrachters required"
+            : "";
+        formErrors.title
+          ? this.setState({
+              formValid: Object.assign({}, formValid, {
+                title: false
+              })
+            })
+          : this.setState({
+              formValid: Object.assign({}, formValid, {
+                title: true
+              })
+            });
+        break;
+      case "description":
+        formErrors.description =
+          value.length < 50 && value.length > 0
+            ? "Minimum  50 chrachters required"
+            : "";
+        formErrors.description
+          ? this.setState({
+              formValid: Object.assign({}, formValid, {
+                description: false
+              })
+            })
+          : this.setState({
+              formValid: Object.assign({}, formValid, {
+                description: true
+              })
+            });
+        break;
+      case "author":
+        formErrors.author =
+          value.length < 3 && value.length > 0
+            ? "Minimum 3 chrachters required"
+            : "";
+        formErrors.author
+          ? this.setState({
+              formValid: Object.assign({}, formValid, {
+                author: false
+              })
+            })
+          : this.setState({
+              formValid: Object.assign({}, formValid, {
+                author: true
+              })
+            });
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ formErrors, [name]: value });
+
+    // const state = this.state;
+    // state[e.target.name] = e.target.value;
+    // this.setState({ state });
   };
 
   onSubmit = e => {
     e.preventDefault();
+    if (Object.values(this.state.formValid).every(x => x === true)) {
+      const { title, description, author, imageURL } = this.state;
 
-    const { title, description, author, imageURL } = this.state;
-
-    const updateRef = firebase
-      .firestore()
-      .collection("blog")
-      .doc(this.state.key);
-    updateRef
-      .set({ title, description, author, imageURL })
-      .then(docRef => {
-        this.setState({
-          key: "",
-          title: "",
-          description: "",
-          author: "",
-          imageURL: ""
+      const updateRef = firebase
+        .firestore()
+        .collection("blog")
+        .doc(this.state.key);
+      updateRef
+        .set({ title, description, author, imageURL })
+        .then(docRef => {
+          // this.setState({
+          //   key: "",
+          //   title: "",
+          //   description: "",
+          //   author: "",
+          //   imageURL: ""
+          // });
+          this.props.history.push("/Blog/Post/" + this.props.match.params.id);
+        })
+        .catch(error => {
+          console.error("Error adding document: ", error);
         });
-        this.props.history.push("/Blog/Post/" + this.props.match.params.id);
-      })
-      .catch(error => {
-        console.error("Error adding document: ", error);
-      });
+    } else {
+    }
   };
 
   render() {
@@ -162,7 +237,13 @@ class Edit extends Component {
               <div>
                 <img src={this.state.imageURL} alt="" width="600" />
               </div>
-              <button type="submit" className="btn-large green">
+              <button
+                type="submit"
+                className="btn-large green"
+                disabled={
+                  !Object.values(this.state.formValid).every(x => x === true)
+                }
+              >
                 Submit <i className="material-icons right">send</i>
               </button>
             </form>

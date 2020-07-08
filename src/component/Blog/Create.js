@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import firebase from "../../Firebase";
 import ImageUpload from "./ImageUpload";
+//import $ from "jquery";
+import M from "materialize-css/dist/js/materialize.js";
 
 // const formValid = ({ formErrors, ...rest }) => {
 //   let valid = true;
@@ -29,13 +31,15 @@ class Create extends Component {
       titleError: "",
       description: "",
       author: "",
+      dateCreated: "",
       imageURL: "",
-      formErrors: { title: "", description: "", author: "" },
+      formErrors: { title: "", description: "", author: "", dateCreated: "" },
       formValid: {
         title: false,
         description: false,
         author: false,
-        imageURL: false
+        imageURL: false,
+        dateCreated: false
       }
     };
     //isSubmitDisabled: true
@@ -45,7 +49,7 @@ class Create extends Component {
     e.preventDefault();
     //console.log(e.target.className);
     const { name, value } = e.target;
-
+    //alert(console.log(document.querySelector(".datepicker").value));
     let state = this.state;
     let formErrors = state.formErrors;
     let formValid = state.formValid;
@@ -132,15 +136,16 @@ class Create extends Component {
     //console.log(Object.values(this.state.formValid).every(x => x === true));
 
     if (Object.values(this.state.formValid).every(x => x === true)) {
-      const { title, description, author, imageURL } = this.state;
+      const { title, description, author, imageURL, dateCreated } = this.state;
       this.ref
-        .add({ title, description, author, imageURL })
+        .add({ title, description, author, imageURL, dateCreated })
         .then(docRef => {
           this.setState({
             title: "",
             description: "",
             author: "",
-            imageURL: ""
+            imageURL: "",
+            dateCreated: ""
           });
           this.props.history.push("/Blog");
         })
@@ -151,17 +156,44 @@ class Create extends Component {
     }
   };
 
+  componentDidMount() {
+    var dateCreated;
+    M.Datepicker.init(document.querySelector(".datepicker"), {
+      autoClose: true,
+      onClose: function() {
+        //console.log(this);
+        dateCreated = this.date;
+        document.querySelector("#selectedDate").value = dateCreated;
+        //console.log(dateCreated);
+        //console.log(document.querySelector(".datepicker").value);
+        //console.log(document.querySelector("#selectedDate").value);
+      }
+    });
+  }
+
+  dateSelected = e => {
+    setTimeout(() => {
+      this.setState({
+        dateCreated: document.querySelector("#selectedDate").value,
+        formValid: Object.assign({}, this.state.formValid, {
+          dateCreated: true
+        })
+      });
+    }, 2000);
+  };
+
   render() {
-    const { title, description, author } = this.state;
+    const { title, description, author, dateCreated } = this.state;
     return (
       <div className="container ">
         <div className="row ">
-          <blockquote>
+          <blockquote className="prefix blue-text">
             <h1 className="blue-text">Create Post</h1>
           </blockquote>
           <form onSubmit={this.onSubmit} className="s12">
             <div className="row">
               <div className="input-field">
+                <i class="material-icons prefix blue-text">create</i>
                 <label htmlFor="title">Title:</label>
                 <input
                   type="text"
@@ -180,6 +212,7 @@ class Create extends Component {
             </div>
             <div className="row">
               <div className="input-field">
+                <i class="material-icons prefix blue-text">content_copy</i>
                 <label htmlFor="description">Description:</label>
                 <textarea
                   className={
@@ -199,6 +232,7 @@ class Create extends Component {
             </div>
             <div className="row">
               <div className="input-field">
+                <i class="material-icons prefix blue-text">account_box</i>
                 <label htmlFor="author">Author:</label>
                 <input
                   type="text"
@@ -213,6 +247,21 @@ class Create extends Component {
                   autoComplete="off"
                 />
                 <div className="errorTxt">{this.state.formErrors.author}</div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="input-field">
+                <i class="material-icons prefix blue-text">date_range</i>
+                <label htmlFor="author">Date Created:</label>
+                <input
+                  type="text"
+                  name="dateCreated"
+                  className="datepicker"
+                  value={dateCreated}
+                  onBlur={this.dateSelected}
+                />
+                <input type="hidden" id="selectedDate" value="" />
               </div>
             </div>
 

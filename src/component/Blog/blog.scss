@@ -9,3 +9,13 @@
 .errorTxt {
   color: red;
 }
+
+blockquote {
+  border-left: 10px solid #2196f3;
+  text-shadow: 1px 1px 1px blue;
+}
+
+.card .card-content {
+  max-height: 155px;
+  overflow: hidden;
+}

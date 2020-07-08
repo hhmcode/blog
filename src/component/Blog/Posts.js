@@ -42,21 +42,16 @@ class Posts extends Component {
             <h3 className="blue-text">List Of All Blog Posts</h3>
           </blockquote>
           {this.state.blog.map(blog => (
-            <div className="col s12 m4">
-              <div className="card ">
+            <div className="col s12 m6" key={blog.key}>
+              <div className="card z-depth-3 transparent">
                 <div
                   className="card-image"
                   style={{ height: "200px", overflow: "hidden" }}
                 >
-                  <img
-                    className="responsive-img"
-                    src={blog.imageURL}
-                    alt=""
-                    style={{ height: "100%" }}
-                  />
-                  <span className="card-title">{blog.title}</span>
+                  <img className="responsive-img" src={blog.imageURL} alt="" />
                 </div>
                 <div className="card-content">
+                  <span className="card-title">{blog.title}</span>
                   {blog.description.length > 200 ? (
                     <p>{`${blog.description.substring(0, 200)}...`}</p>
                   ) : (
@@ -64,11 +59,8 @@ class Posts extends Component {
                   )}
                 </div>
                 <div className="card-action">
-                  <Link
-                    className="btn btn-primary"
-                    to={`/Blog/Post/${blog.key}`}
-                  >
-                    Read more{" "}
+                  <Link className="btn" to={`/Blog/Post/${blog.key}`}>
+                    Read more
                     <i className="material-icons left">remove_red_eye</i>
                   </Link>
                 </div>
